@@ -4,6 +4,25 @@ import { Category, DeliveryResult, Order, Product } from "@/types";
 
 // --- Public ---
 
+export interface RestaurantSettingsData {
+  id: number;
+  name: string;
+  address: string;
+  latitude: number;
+  longitude: number;
+  phone: string;
+  email: string;
+  working_hours: string;
+}
+
+export function useRestaurantSettings() {
+  return useQuery<RestaurantSettingsData>({
+    queryKey: ["restaurant-settings"],
+    queryFn: () => api.get("/api/restaurant-settings/").then((r) => r.data),
+    staleTime: 5 * 60 * 1000,
+  });
+}
+
 export function useCategories() {
   return useQuery<Category[]>({
     queryKey: ["categories"],
@@ -36,7 +55,7 @@ export function useOrder(id: string) {
     queryKey: ["order", id],
     queryFn: () => api.get(`/api/orders/${id}/`).then((r) => r.data),
     enabled: !!id,
-    refetchInterval: 30000,
+    refetchInterval: 15000,
   });
 }
 
@@ -55,6 +74,53 @@ export function useCreateOrder() {
   >({
     mutationFn: (data) =>
       api.post("/api/orders/", data).then((r) => r.data),
+  });
+}
+
+// --- Customer Auth ---
+
+export function useCustomerRegister() {
+  return useMutation<
+    { access: string; refresh: string; user: { id: number; phone: string; name: string } },
+    Error,
+    { phone: string; name: string; password: string }
+  >({
+    mutationFn: (data) =>
+      api.post("/api/auth/customer/register/", data).then((r) => r.data),
+  });
+}
+
+export function useCustomerLogin() {
+  return useMutation<
+    { access: string; refresh: string },
+    Error,
+    { username: string; password: string }
+  >({
+    mutationFn: (data) =>
+      api.post("/api/auth/customer/token/", data).then((r) => r.data),
+  });
+}
+
+export function useCustomerProfile() {
+  return useQuery<{ id: number; phone: string; name: string }>({
+    queryKey: ["customer-profile"],
+    queryFn: () => api.get("/api/auth/customer/profile/").then((r) => r.data),
+    enabled: typeof window !== "undefined" && !!localStorage.getItem("customer_token"),
+  });
+}
+
+export function useCustomerOrders() {
+  return useQuery<Order[]>({
+    queryKey: ["customer-orders"],
+    queryFn: () => api.get("/api/orders/").then((r) => r.data),
+    enabled: typeof window !== "undefined" && !!localStorage.getItem("customer_token"),
+  });
+}
+
+export function useConfirmDelivery() {
+  return useMutation<Order, Error, string>({
+    mutationFn: (id) =>
+      api.post(`/api/orders/${id}/confirm-delivery/`).then((r) => r.data),
   });
 }
 
@@ -81,9 +147,9 @@ export function useAdminOrder(id: string) {
 }
 
 export function useAdminUpdateOrderStatus() {
-  return useMutation<Order, Error, { id: string; status: string }>({
-    mutationFn: ({ id, status }) =>
-      api.patch(`/api/admin/orders/${id}/status/`, { status }).then((r) => r.data),
+  return useMutation<Order, Error, { id: string; status: string; note?: string }>({
+    mutationFn: ({ id, status, note }) =>
+      api.patch(`/api/admin/orders/${id}/status/`, { status, note: note ?? "" }).then((r) => r.data),
   });
 }
 

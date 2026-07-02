@@ -1,6 +1,7 @@
 "use client";
 
 import { clsx } from "clsx";
+import { useTranslations } from "next-intl";
 import { Category } from "@/types";
 
 interface Props {
@@ -10,6 +11,8 @@ interface Props {
 }
 
 export default function CategoryFilter({ categories, selected, onSelect }: Props) {
+  const t = useTranslations("menu");
+
   return (
     <div className="flex gap-2 overflow-x-auto scrollbar-hide py-2">
       <button
@@ -21,7 +24,7 @@ export default function CategoryFilter({ categories, selected, onSelect }: Props
             : "bg-surface text-muted hover:text-white border border-border"
         )}
       >
-        Все
+        {t("all")}
       </button>
       {categories.map((cat) => (
         <button

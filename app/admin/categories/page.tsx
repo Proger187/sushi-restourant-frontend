@@ -7,12 +7,14 @@ import { useAdminCategories } from "@/lib/queries";
 import { Category } from "@/types";
 import api from "@/lib/api";
 import { useQueryClient } from "@tanstack/react-query";
+import { useTranslations } from "next-intl";
 
 export default function AdminCategoriesPage() {
   const { data: categories = [] } = useAdminCategories();
   const queryClient = useQueryClient();
   const [showForm, setShowForm] = useState(false);
   const [editCategory, setEditCategory] = useState<Category | null>(null);
+  const t = useTranslations("admin");
 
   const [name, setName] = useState("");
   const [slug, setSlug] = useState("");
@@ -51,7 +53,7 @@ export default function AdminCategoriesPage() {
   };
 
   const handleDelete = async (categorySlug: string) => {
-    if (!confirm("Удалить категорию?")) return;
+    if (!confirm(t("delete_category"))) return;
     await api.delete(`/api/admin/categories/${categorySlug}/`);
     queryClient.invalidateQueries({ queryKey: ["admin-categories"] });
   };
@@ -66,13 +68,13 @@ export default function AdminCategoriesPage() {
   return (
     <div className="space-y-6">
       <div className="flex items-center justify-between">
-        <h1 className="text-2xl font-bold">Категории</h1>
+        <h1 className="text-2xl font-bold">{t("categories_title")}</h1>
         <button
           onClick={openCreate}
           className="bg-accent hover:bg-accent/90 text-white text-sm px-4 py-2 rounded-xl font-medium flex items-center gap-2"
         >
           <Plus className="w-4 h-4" />
-          Добавить
+          {t("add")}
         </button>
       </div>
 
@@ -107,7 +109,7 @@ export default function AdminCategoriesPage() {
                     : "bg-red-500/20 text-red-400"
                 }`}
               >
-                {cat.is_active ? "Активна" : "Скрыта"}
+                {cat.is_active ? t("active") : t("hidden")}
               </button>
               <button
                 onClick={() => openEdit(cat)}
@@ -125,7 +127,7 @@ export default function AdminCategoriesPage() {
           ))}
           {categories.length === 0 && (
             <p className="text-center text-muted py-8">
-              Категорий пока нет
+              {t("no_categories")}
             </p>
           )}
         </div>
@@ -138,7 +140,7 @@ export default function AdminCategoriesPage() {
             className="bg-surface border border-border rounded-2xl w-full max-w-sm p-6 space-y-4"
           >
             <h2 className="text-lg font-semibold">
-              {editCategory ? "Редактировать" : "Новая категория"}
+              {editCategory ? t("edit") : t("new_category")}
             </h2>
             <input
               value={name}
@@ -153,14 +155,14 @@ export default function AdminCategoriesPage() {
                   );
                 }
               }}
-              placeholder="Название"
+              placeholder={t("name_label")}
               required
               className="w-full bg-background border border-border rounded-xl px-4 py-2.5 text-sm focus:outline-none focus:border-accent"
             />
             <input
               value={slug}
               onChange={(e) => setSlug(e.target.value)}
-              placeholder="Slug"
+              placeholder={t("slug_label")}
               required
               className="w-full bg-background border border-border rounded-xl px-4 py-2.5 text-sm focus:outline-none focus:border-accent"
             />
@@ -176,13 +178,13 @@ export default function AdminCategoriesPage() {
                 onClick={() => setShowForm(false)}
                 className="flex-1 border border-border text-muted py-2.5 rounded-xl text-sm"
               >
-                Отмена
+                {t("cancel")}
               </button>
               <button
                 type="submit"
                 className="flex-1 bg-accent text-white py-2.5 rounded-xl text-sm font-medium"
               >
-                {editCategory ? "Сохранить" : "Создать"}
+                {editCategory ? t("save") : t("create")}
               </button>
             </div>
           </form>

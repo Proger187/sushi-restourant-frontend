@@ -9,8 +9,17 @@ import {
 } from "@/lib/queries";
 import { Product } from "@/types";
 import { useQueryClient } from "@tanstack/react-query";
+import { useTranslations } from "next-intl";
 
-const ALLERGEN_OPTIONS = ["Рыба", "Глютен", "Соя", "Молоко", "Яйца", "Орехи", "Кунжут"];
+const ALLERGEN_KEYS = [
+  "allergen_fish",
+  "allergen_gluten",
+  "allergen_soy",
+  "allergen_dairy",
+  "allergen_eggs",
+  "allergen_nuts",
+  "allergen_sesame",
+] as const;
 
 function slugify(str: string) {
   return str
@@ -29,6 +38,9 @@ export default function ProductFormModal({ product, onClose }: Props) {
   const createProduct = useAdminCreateProduct();
   const updateProduct = useAdminUpdateProduct();
   const queryClient = useQueryClient();
+  const t = useTranslations("admin");
+
+  const allergenOptions = ALLERGEN_KEYS.map((key) => t(key));
 
   const [name, setName] = useState(product?.name ?? "");
   const [slug, setSlug] = useState(product?.slug ?? "");
@@ -87,7 +99,7 @@ export default function ProductFormModal({ product, onClose }: Props) {
       <div className="bg-surface border border-border rounded-2xl w-full max-w-lg max-h-[90vh] overflow-y-auto">
         <div className="flex items-center justify-between p-4 border-b border-border">
           <h2 className="text-lg font-semibold">
-            {product ? "Редактировать" : "Новый товар"}
+            {product ? t("product_edit") : t("product_new")}
           </h2>
           <button onClick={onClose} className="p-1 hover:bg-background rounded">
             <X className="w-5 h-5" />
@@ -96,7 +108,7 @@ export default function ProductFormModal({ product, onClose }: Props) {
 
         <form onSubmit={handleSubmit} className="p-4 space-y-4">
           <div>
-            <label className="block text-sm text-muted mb-1">Изображение</label>
+            <label className="block text-sm text-muted mb-1">{t("image")}</label>
             <input
               type="file"
               accept="image/*"
@@ -106,7 +118,7 @@ export default function ProductFormModal({ product, onClose }: Props) {
           </div>
 
           <div>
-            <label className="block text-sm text-muted mb-1">Название *</label>
+            <label className="block text-sm text-muted mb-1">{t("name_label")} *</label>
             <input
               value={name}
               onChange={(e) => setName(e.target.value)}
@@ -116,7 +128,7 @@ export default function ProductFormModal({ product, onClose }: Props) {
           </div>
 
           <div>
-            <label className="block text-sm text-muted mb-1">Slug</label>
+            <label className="block text-sm text-muted mb-1">{t("slug_label")}</label>
             <input
               value={slug}
               onChange={(e) => {
@@ -128,14 +140,14 @@ export default function ProductFormModal({ product, onClose }: Props) {
           </div>
 
           <div>
-            <label className="block text-sm text-muted mb-1">Категория *</label>
+            <label className="block text-sm text-muted mb-1">{t("col_category")} *</label>
             <select
               value={categoryId}
               onChange={(e) => setCategoryId(e.target.value)}
               required
               className="w-full bg-background border border-border rounded-xl px-4 py-2.5 text-sm focus:outline-none focus:border-accent"
             >
-              <option value="">Выберите...</option>
+              <option value="">{t("select")}</option>
               {categories.map((c) => (
                 <option key={c.id} value={c.id}>
                   {c.name}
@@ -145,7 +157,7 @@ export default function ProductFormModal({ product, onClose }: Props) {
           </div>
 
           <div>
-            <label className="block text-sm text-muted mb-1">Описание</label>
+            <label className="block text-sm text-muted mb-1">{t("description")}</label>
             <textarea
               value={description}
               onChange={(e) => setDescription(e.target.value)}
@@ -156,7 +168,7 @@ export default function ProductFormModal({ product, onClose }: Props) {
 
           <div className="grid grid-cols-3 gap-3">
             <div>
-              <label className="block text-sm text-muted mb-1">Цена *</label>
+              <label className="block text-sm text-muted mb-1">{t("price")} *</label>
               <input
                 type="number"
                 step="0.01"
@@ -167,7 +179,7 @@ export default function ProductFormModal({ product, onClose }: Props) {
               />
             </div>
             <div>
-              <label className="block text-sm text-muted mb-1">Вес (г)</label>
+              <label className="block text-sm text-muted mb-1">{t("weight_g")}</label>
               <input
                 type="number"
                 value={weightG}
@@ -176,7 +188,7 @@ export default function ProductFormModal({ product, onClose }: Props) {
               />
             </div>
             <div>
-              <label className="block text-sm text-muted mb-1">Штук</label>
+              <label className="block text-sm text-muted mb-1">{t("pieces")}</label>
               <input
                 type="number"
                 value={pieces}
@@ -194,7 +206,7 @@ export default function ProductFormModal({ product, onClose }: Props) {
                 onChange={(e) => setIsAvailable(e.target.checked)}
                 className="accent-accent"
               />
-              Доступен
+              {t("col_available")}
             </label>
             <label className="flex items-center gap-2 cursor-pointer text-sm">
               <input
@@ -203,14 +215,14 @@ export default function ProductFormModal({ product, onClose }: Props) {
                 onChange={(e) => setIsFeatured(e.target.checked)}
                 className="accent-accent"
               />
-              В избранном
+              {t("featured")}
             </label>
           </div>
 
           <div>
-            <label className="block text-sm text-muted mb-2">Аллергены</label>
+            <label className="block text-sm text-muted mb-2">{t("allergens")}</label>
             <div className="flex flex-wrap gap-2">
-              {ALLERGEN_OPTIONS.map((a) => (
+              {allergenOptions.map((a) => (
                 <button
                   key={a}
                   type="button"
@@ -233,10 +245,10 @@ export default function ProductFormModal({ product, onClose }: Props) {
             className="w-full bg-accent hover:bg-accent/90 disabled:opacity-50 text-white py-3 rounded-xl font-semibold"
           >
             {isPending
-              ? "Сохранение..."
+              ? t("saving")
               : product
-                ? "Сохранить"
-                : "Создать"}
+                ? t("save")
+                : t("create")}
           </button>
         </form>
       </div>

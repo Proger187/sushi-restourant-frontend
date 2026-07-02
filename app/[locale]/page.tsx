@@ -2,66 +2,56 @@
 
 import Link from "next/link";
 import { UtensilsCrossed, CreditCard, Truck } from "lucide-react";
+import { useTranslations } from "next-intl";
 import { useProducts } from "@/lib/queries";
 import ProductCard from "@/components/menu/ProductCard";
 import ProductCardSkeleton from "@/components/menu/ProductCardSkeleton";
 
-const steps = [
-  {
-    icon: UtensilsCrossed,
-    title: "Выберите блюда",
-    description: "Выберите из нашего меню свежих суши и роллов",
-  },
-  {
-    icon: CreditCard,
-    title: "Оформите заказ",
-    description: "Укажите адрес доставки и способ оплаты",
-  },
-  {
-    icon: Truck,
-    title: "Получите доставку",
-    description: "Курьер доставит заказ прямо к вашей двери",
-  },
-];
-
 export default function Home() {
+  const t = useTranslations("home");
   const { data: featured, isLoading } = useProducts(undefined, true);
+
+  const steps = [
+    { icon: UtensilsCrossed, title: t("step1_title"), desc: t("step1_desc") },
+    { icon: CreditCard, title: t("step2_title"), desc: t("step2_desc") },
+    { icon: Truck, title: t("step3_title"), desc: t("step3_desc") },
+  ];
 
   return (
     <main>
-      {/* Hero */}
       <section className="relative min-h-[70vh] flex items-center justify-center bg-gradient-to-br from-background via-surface to-background">
         <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,_var(--tw-gradient-stops))] from-accent/10 via-transparent to-transparent" />
         <div className="relative text-center px-4 max-w-3xl mx-auto space-y-6">
           <h1 className="font-[family-name:var(--font-playfair)] text-5xl md:text-7xl font-bold leading-tight">
-            Свежие суши
+            {t("hero_title").split(" ").slice(0, 2).join(" ")}
             <br />
-            <span className="text-accent">с доставкой</span>
+            <span className="text-accent">
+              {t("hero_title").split(" ").slice(2).join(" ")}
+            </span>
           </h1>
           <p className="text-muted text-lg md:text-xl max-w-xl mx-auto">
-            Готовим из свежих ингредиентов и доставляем прямо к вашей двери
+            {t("hero_subtitle")}
           </p>
           <div className="flex flex-col sm:flex-row gap-4 justify-center pt-4">
             <Link
               href="/menu"
               className="bg-accent hover:bg-accent/90 text-white px-8 py-3.5 rounded-xl font-semibold transition-colors text-lg"
             >
-              Смотреть меню
+              {t("cta_menu")}
             </Link>
             <a
               href="#how-it-works"
               className="border border-border hover:border-muted text-white px-8 py-3.5 rounded-xl font-semibold transition-colors text-lg"
             >
-              Как заказать
+              {t("cta_how")}
             </a>
           </div>
         </div>
       </section>
 
-      {/* Featured Products */}
       <section className="max-w-7xl mx-auto px-4 py-16">
         <h2 className="font-[family-name:var(--font-playfair)] text-3xl font-bold mb-8">
-          Популярное
+          {t("featured_title")}
         </h2>
         <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 md:gap-6">
           {isLoading
@@ -74,10 +64,9 @@ export default function Home() {
         </div>
       </section>
 
-      {/* How it works */}
       <section id="how-it-works" className="max-w-7xl mx-auto px-4 py-16">
         <h2 className="font-[family-name:var(--font-playfair)] text-3xl font-bold mb-12 text-center">
-          Как это работает
+          {t("steps_title")}
         </h2>
         <div className="grid md:grid-cols-3 gap-8">
           {steps.map((step, i) => (
@@ -86,22 +75,21 @@ export default function Home() {
                 <step.icon className="w-8 h-8 text-accent" />
               </div>
               <h3 className="text-xl font-semibold">{step.title}</h3>
-              <p className="text-muted">{step.description}</p>
+              <p className="text-muted">{step.desc}</p>
             </div>
           ))}
         </div>
       </section>
 
-      {/* Delivery Info */}
       <section className="max-w-7xl mx-auto px-4 py-16">
         <h2 className="font-[family-name:var(--font-playfair)] text-3xl font-bold mb-8 text-center">
-          Зоны доставки
+          {t("zones_title")}
         </h2>
         <div className="grid md:grid-cols-3 gap-6">
           {[
-            { zone: "до 3 км", fee: "Бесплатно", min: "от 1 500 ₸" },
-            { zone: "3–7 км", fee: "500 ₸", min: "от 2 000 ₸" },
-            { zone: "7–12 км", fee: "1 000 ₸", min: "от 3 000 ₸" },
+            { zone: "< 3 km", fee: t("zone_free"), min: "1 500 ₸" },
+            { zone: "3–7 km", fee: "500 ₸", min: "2 000 ₸" },
+            { zone: "7–12 km", fee: "1 000 ₸", min: "3 000 ₸" },
           ].map((z) => (
             <div
               key={z.zone}
@@ -109,30 +97,29 @@ export default function Home() {
             >
               <p className="text-lg font-semibold">{z.zone}</p>
               <p className="text-accent text-2xl font-bold">{z.fee}</p>
-              <p className="text-muted text-sm">Мин. заказ {z.min}</p>
+              <p className="text-muted text-sm">
+                {t("zone_min")} {z.min}
+              </p>
             </div>
           ))}
         </div>
       </section>
 
-      {/* Footer */}
       <footer id="contacts" className="border-t border-border mt-16">
         <div className="max-w-7xl mx-auto px-4 py-12 grid md:grid-cols-3 gap-8">
           <div>
-            <h3 className="font-semibold text-lg mb-3">🍣 Sushi</h3>
-            <p className="text-muted text-sm">
-              Свежие суши и роллы с доставкой по городу
-            </p>
+            <h3 className="font-semibold text-lg mb-3">Sushi</h3>
+            <p className="text-muted text-sm">{t("footer_desc")}</p>
           </div>
           <div>
-            <h3 className="font-semibold mb-3">Адрес</h3>
+            <h3 className="font-semibold mb-3">{t("footer_address_title")}</h3>
             <p className="text-muted text-sm">ул. Примерная, 42</p>
             <p className="text-muted text-sm">г. Астана</p>
           </div>
           <div>
-            <h3 className="font-semibold mb-3">Контакты</h3>
+            <h3 className="font-semibold mb-3">{t("footer_contacts_title")}</h3>
             <p className="text-muted text-sm">+7 (777) 123-45-67</p>
-            <p className="text-muted text-sm mt-1">Пн–Вс: 10:00 – 23:00</p>
+            <p className="text-muted text-sm mt-1">10:00 – 23:00</p>
           </div>
         </div>
       </footer>

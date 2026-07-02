@@ -4,6 +4,7 @@ import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { Loader2 } from "lucide-react";
 import api from "@/lib/api";
+import { useTranslations } from "next-intl";
 
 export default function AdminLoginPage() {
   const router = useRouter();
@@ -11,6 +12,7 @@ export default function AdminLoginPage() {
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
+  const t = useTranslations("admin");
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -26,7 +28,7 @@ export default function AdminLoginPage() {
       localStorage.setItem("refresh_token", data.refresh);
       router.push("/admin");
     } catch {
-      setError("Неверный логин или пароль");
+      setError(t("login_error"));
     } finally {
       setLoading(false);
     }
@@ -35,19 +37,19 @@ export default function AdminLoginPage() {
   return (
     <div className="min-h-screen flex items-center justify-center bg-background px-4">
       <div className="w-full max-w-sm bg-surface border border-border rounded-2xl p-8">
-        <h1 className="text-2xl font-bold text-center mb-6">Вход в панель</h1>
+        <h1 className="text-2xl font-bold text-center mb-6">{t("login_title")}</h1>
 
         <form onSubmit={handleSubmit} className="space-y-4">
           <input
             type="text"
-            placeholder="Логин"
+            placeholder={t("login_username")}
             value={username}
             onChange={(e) => setUsername(e.target.value)}
             className="w-full bg-background border border-border rounded-xl px-4 py-3 text-white placeholder:text-muted focus:outline-none focus:border-accent"
           />
           <input
             type="password"
-            placeholder="Пароль"
+            placeholder={t("login_password")}
             value={password}
             onChange={(e) => setPassword(e.target.value)}
             className="w-full bg-background border border-border rounded-xl px-4 py-3 text-white placeholder:text-muted focus:outline-none focus:border-accent"
@@ -65,7 +67,7 @@ export default function AdminLoginPage() {
             {loading ? (
               <Loader2 className="w-5 h-5 animate-spin" />
             ) : (
-              "Войти"
+              t("login_submit")
             )}
           </button>
         </form>

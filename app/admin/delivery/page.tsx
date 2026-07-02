@@ -6,6 +6,7 @@ import { useAdminDeliveryZones } from "@/lib/queries";
 import { formatPrice } from "@/lib/utils";
 import api from "@/lib/api";
 import { useQueryClient } from "@tanstack/react-query";
+import { useTranslations } from "next-intl";
 
 interface DeliveryZone {
   id: string;
@@ -23,6 +24,7 @@ export default function AdminDeliveryPage() {
   const queryClient = useQueryClient();
   const [showForm, setShowForm] = useState(false);
   const [editZone, setEditZone] = useState<DeliveryZone | null>(null);
+  const t = useTranslations("admin");
 
   const [name, setName] = useState("");
   const [maxKm, setMaxKm] = useState("");
@@ -66,7 +68,7 @@ export default function AdminDeliveryPage() {
   };
 
   const handleDelete = async (id: string) => {
-    if (!confirm("Удалить зону?")) return;
+    if (!confirm(t("delete_zone"))) return;
     await api.delete(`/api/admin/delivery-zones/${id}/`);
     queryClient.invalidateQueries({ queryKey: ["admin-delivery-zones"] });
   };
@@ -81,13 +83,13 @@ export default function AdminDeliveryPage() {
   return (
     <div className="space-y-6">
       <div className="flex items-center justify-between">
-        <h1 className="text-2xl font-bold">Зоны доставки</h1>
+        <h1 className="text-2xl font-bold">{t("delivery_title")}</h1>
         <button
           onClick={openCreate}
           className="bg-accent hover:bg-accent/90 text-white text-sm px-4 py-2 rounded-xl font-medium flex items-center gap-2"
         >
           <Plus className="w-4 h-4" />
-          Добавить
+          {t("add")}
         </button>
       </div>
 
@@ -96,11 +98,11 @@ export default function AdminDeliveryPage() {
           <table className="w-full text-sm">
             <thead>
               <tr className="text-left text-muted border-b border-border">
-                <th className="px-4 py-3 font-medium">Зона</th>
-                <th className="px-4 py-3 font-medium">Макс. км</th>
-                <th className="px-4 py-3 font-medium">Стоимость</th>
-                <th className="px-4 py-3 font-medium">Мин. заказ</th>
-                <th className="px-4 py-3 font-medium text-center">Активна</th>
+                <th className="px-4 py-3 font-medium">{t("col_zone")}</th>
+                <th className="px-4 py-3 font-medium">{t("col_max_km")}</th>
+                <th className="px-4 py-3 font-medium">{t("col_fee")}</th>
+                <th className="px-4 py-3 font-medium">{t("col_min_order")}</th>
+                <th className="px-4 py-3 font-medium text-center">{t("col_available")}</th>
                 <th className="px-4 py-3" />
               </tr>
             </thead>
@@ -114,7 +116,7 @@ export default function AdminDeliveryPage() {
                   <td className="px-4 py-3">{zone.max_km} км</td>
                   <td className="px-4 py-3">
                     {parseFloat(zone.delivery_fee) === 0
-                      ? "Бесплатно"
+                      ? t("free")
                       : formatPrice(zone.delivery_fee)}
                   </td>
                   <td className="px-4 py-3">
@@ -129,7 +131,7 @@ export default function AdminDeliveryPage() {
                           : "bg-red-500/20 text-red-400"
                       }`}
                     >
-                      {zone.is_active ? "Да" : "Нет"}
+                      {zone.is_active ? t("yes") : t("no")}
                     </button>
                   </td>
                   <td className="px-4 py-3">
@@ -153,17 +155,14 @@ export default function AdminDeliveryPage() {
             </tbody>
           </table>
           {zones.length === 0 && (
-            <p className="text-center text-muted py-8">Зон пока нет</p>
+            <p className="text-center text-muted py-8">{t("no_zones")}</p>
           )}
         </div>
       </div>
 
       <div className="flex items-start gap-2 text-sm text-muted">
         <Info className="w-4 h-4 mt-0.5 flex-shrink-0" />
-        <p>
-          Координаты ресторана настраиваются в переменных окружения
-          (RESTAURANT_LAT, RESTAURANT_LNG)
-        </p>
+        <p>{t("coords_note")}</p>
       </div>
 
       {showForm && (
@@ -173,12 +172,12 @@ export default function AdminDeliveryPage() {
             className="bg-surface border border-border rounded-2xl w-full max-w-sm p-6 space-y-4"
           >
             <h2 className="text-lg font-semibold">
-              {editZone ? "Редактировать" : "Новая зона"}
+              {editZone ? t("edit") : t("new_zone")}
             </h2>
             <input
               value={name}
               onChange={(e) => setName(e.target.value)}
-              placeholder="Название зоны"
+              placeholder={t("zone_name")}
               required
               className="w-full bg-background border border-border rounded-xl px-4 py-2.5 text-sm focus:outline-none focus:border-accent"
             />
@@ -187,7 +186,7 @@ export default function AdminDeliveryPage() {
               step="0.1"
               value={maxKm}
               onChange={(e) => setMaxKm(e.target.value)}
-              placeholder="Макс. расстояние (км)"
+              placeholder={t("max_distance")}
               required
               className="w-full bg-background border border-border rounded-xl px-4 py-2.5 text-sm focus:outline-none focus:border-accent"
             />
@@ -196,7 +195,7 @@ export default function AdminDeliveryPage() {
               step="0.01"
               value={fee}
               onChange={(e) => setFee(e.target.value)}
-              placeholder="Стоимость доставки"
+              placeholder={t("delivery_cost")}
               required
               className="w-full bg-background border border-border rounded-xl px-4 py-2.5 text-sm focus:outline-none focus:border-accent"
             />
@@ -205,7 +204,7 @@ export default function AdminDeliveryPage() {
               step="0.01"
               value={minOrder}
               onChange={(e) => setMinOrder(e.target.value)}
-              placeholder="Минимальный заказ"
+              placeholder={t("min_order_amount")}
               required
               className="w-full bg-background border border-border rounded-xl px-4 py-2.5 text-sm focus:outline-none focus:border-accent"
             />
@@ -215,13 +214,13 @@ export default function AdminDeliveryPage() {
                 onClick={() => setShowForm(false)}
                 className="flex-1 border border-border text-muted py-2.5 rounded-xl text-sm"
               >
-                Отмена
+                {t("cancel")}
               </button>
               <button
                 type="submit"
                 className="flex-1 bg-accent text-white py-2.5 rounded-xl text-sm font-medium"
               >
-                {editZone ? "Сохранить" : "Создать"}
+                {editZone ? t("save") : t("create")}
               </button>
             </div>
           </form>

@@ -28,6 +28,7 @@ export interface DeliveryResult {
   delivery_fee?: string;
   min_order_amount?: string;
   zone_name?: string;
+  estimated_minutes?: number;
   message?: string;
 }
 
@@ -39,13 +40,20 @@ export interface OrderItem {
   line_total: string;
 }
 
+export interface StatusHistoryEntry {
+  id: string;
+  status: string;
+  changed_at: string;
+  changed_by: string;
+  note: string;
+}
+
 export interface Order {
   id: string;
   order_number: string;
   status: string;
   customer_name: string;
   phone: string;
-  email: string;
   address: string;
   delivery_fee: string;
   subtotal: string;
@@ -54,6 +62,14 @@ export interface Order {
   notes: string;
   created_at: string;
   items: OrderItem[];
+  status_history?: StatusHistoryEntry[];
+  confirmed_at?: string | null;
+  cooking_started_at?: string | null;
+  ready_at?: string | null;
+  picked_up_at?: string | null;
+  delivered_at?: string | null;
+  cancelled_at?: string | null;
+  estimated_delivery_minutes?: number | null;
 }
 
 export interface CartItem {

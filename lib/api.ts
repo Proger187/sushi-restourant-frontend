@@ -6,10 +6,16 @@ const api = axios.create({
 
 api.interceptors.request.use((config) => {
   if (typeof window !== "undefined") {
-    const token = localStorage.getItem("token");
     const url = config.url ?? "";
-    if (token && (url.includes("/admin/") || url.includes("/auth/"))) {
-      config.headers.Authorization = `Bearer ${token}`;
+    if (url.includes("/admin/") || url === "/api/auth/token/" || url === "/api/auth/token/refresh/") {
+      const token = localStorage.getItem("token");
+      if (token) config.headers.Authorization = `Bearer ${token}`;
+    } else if (
+      url.includes("/api/orders") ||
+      url.includes("/api/auth/customer/")
+    ) {
+      const token = localStorage.getItem("customer_token");
+      if (token) config.headers.Authorization = `Bearer ${token}`;
     }
   }
   return config;

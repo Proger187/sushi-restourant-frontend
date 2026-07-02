@@ -12,12 +12,14 @@ import { formatPrice } from "@/lib/utils";
 import { Product } from "@/types";
 import ProductFormModal from "@/components/admin/ProductFormModal";
 import { useQueryClient } from "@tanstack/react-query";
+import { useTranslations } from "next-intl";
 
 export default function AdminProductsPage() {
   const { data: products = [] } = useAdminProducts();
   const { data: categories = [] } = useAdminCategories();
   const deleteProduct = useAdminDeleteProduct();
   const queryClient = useQueryClient();
+  const t = useTranslations("admin");
 
   const [search, setSearch] = useState("");
   const [categoryFilter, setCategoryFilter] = useState("");
@@ -31,7 +33,7 @@ export default function AdminProductsPage() {
   });
 
   const handleDelete = (slug: string) => {
-    if (!confirm("Удалить товар?")) return;
+    if (!confirm(t("delete_product"))) return;
     deleteProduct.mutate(slug, {
       onSuccess: () =>
         queryClient.invalidateQueries({ queryKey: ["admin-products"] }),
@@ -41,7 +43,7 @@ export default function AdminProductsPage() {
   return (
     <div className="space-y-6">
       <div className="flex items-center justify-between">
-        <h1 className="text-2xl font-bold">Товары</h1>
+        <h1 className="text-2xl font-bold">{t("products_title")}</h1>
         <button
           onClick={() => {
             setModalProduct(null);
@@ -50,7 +52,7 @@ export default function AdminProductsPage() {
           className="bg-accent hover:bg-accent/90 text-white text-sm px-4 py-2 rounded-xl font-medium flex items-center gap-2"
         >
           <Plus className="w-4 h-4" />
-          Добавить
+          {t("add")}
         </button>
       </div>
 
@@ -59,7 +61,7 @@ export default function AdminProductsPage() {
           <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted" />
           <input
             type="text"
-            placeholder="Поиск..."
+            placeholder={t("search")}
             value={search}
             onChange={(e) => setSearch(e.target.value)}
             className="w-full bg-surface border border-border rounded-xl pl-10 pr-4 py-2.5 text-sm focus:outline-none focus:border-accent"
@@ -70,7 +72,7 @@ export default function AdminProductsPage() {
           onChange={(e) => setCategoryFilter(e.target.value)}
           className="bg-surface border border-border rounded-xl px-4 py-2.5 text-sm focus:outline-none focus:border-accent"
         >
-          <option value="">Все категории</option>
+          <option value="">{t("all_categories")}</option>
           {categories.map((c) => (
             <option key={c.id} value={c.name}>
               {c.name}
@@ -85,12 +87,12 @@ export default function AdminProductsPage() {
             <thead>
               <tr className="text-left text-muted border-b border-border">
                 <th className="px-4 py-3 font-medium w-12" />
-                <th className="px-4 py-3 font-medium">Название</th>
-                <th className="px-4 py-3 font-medium">Категория</th>
-                <th className="px-4 py-3 font-medium">Цена</th>
-                <th className="px-4 py-3 font-medium">Вес</th>
+                <th className="px-4 py-3 font-medium">{t("col_name")}</th>
+                <th className="px-4 py-3 font-medium">{t("col_category")}</th>
+                <th className="px-4 py-3 font-medium">{t("col_price")}</th>
+                <th className="px-4 py-3 font-medium">{t("col_weight")}</th>
                 <th className="px-4 py-3 font-medium text-center">
-                  Доступен
+                  {t("col_available")}
                 </th>
                 <th className="px-4 py-3" />
               </tr>
@@ -130,7 +132,7 @@ export default function AdminProductsPage() {
                           : "text-red-400"
                       }
                     >
-                      {product.is_available ? "Да" : "Нет"}
+                      {product.is_available ? t("yes") : t("no")}
                     </span>
                   </td>
                   <td className="px-4 py-3">
@@ -157,7 +159,7 @@ export default function AdminProductsPage() {
             </tbody>
           </table>
           {filtered.length === 0 && (
-            <p className="text-center text-muted py-8">Товаров не найдено</p>
+            <p className="text-center text-muted py-8">{t("no_products")}</p>
           )}
         </div>
       </div>
