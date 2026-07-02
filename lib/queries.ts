@@ -36,7 +36,7 @@ export function useRestaurantSettings() {
   return useQuery<RestaurantSettingsData>({
     queryKey: ["restaurant-settings"],
     queryFn: () => api.get("/api/restaurant-settings/").then((r) => r.data),
-    staleTime: 5 * 60 * 1000,
+    staleTime: 30 * 60 * 1000,
   });
 }
 
@@ -44,6 +44,7 @@ export function useCategories() {
   return useQuery<Category[]>({
     queryKey: ["categories"],
     queryFn: () => api.get("/api/categories/").then((r) => r.data),
+    staleTime: 10 * 60 * 1000,
   });
 }
 
@@ -94,43 +95,65 @@ export function useCreateOrder() {
   });
 }
 
-// --- Customer Auth ---
+export interface CustomerProfile {
+  id: string;
+  email: string;
+  first_name: string;
+  last_name: string;
+  phone: string;
+  full_name: string;
+  date_joined: string;
+}
+
+export interface FavouriteItem {
+  id: string;
+  product: Product;
+  added_at: string;
+}
+
+// --- Customer Auth & Profile ---
 
 export function useCustomerRegister() {
   return useMutation<
-    { access: string; refresh: string; user: { id: number; phone: string; name: string } },
+    { access: string; refresh: string; customer: { id: string; email: string; full_name: string } },
     Error,
-    { phone: string; name: string; password: string }
+    { email: string; password: string; first_name?: string; last_name?: string; phone?: string }
   >({
     mutationFn: (data) =>
-      api.post("/api/auth/customer/register/", data).then((r) => r.data),
+      api.post("/api/accounts/register/", data).then((r) => r.data),
   });
 }
 
 export function useCustomerLogin() {
   return useMutation<
-    { access: string; refresh: string },
+    { access: string; refresh: string; customer: { id: string; email: string; full_name: string } },
     Error,
-    { username: string; password: string }
+    { email: string; password: string }
   >({
     mutationFn: (data) =>
-      api.post("/api/auth/customer/token/", data).then((r) => r.data),
+      api.post("/api/accounts/login/", data).then((r) => r.data),
   });
 }
 
-export function useCustomerProfile() {
-  return useQuery<{ id: number; phone: string; name: string }>({
-    queryKey: ["customer-profile"],
-    queryFn: () => api.get("/api/auth/customer/profile/").then((r) => r.data),
-    enabled: typeof window !== "undefined" && !!localStorage.getItem("customer_token"),
+export function useProfile(enabled = true) {
+  return useQuery<CustomerProfile>({
+    queryKey: ["profile"],
+    queryFn: () => api.get("/api/accounts/profile/").then((r) => r.data),
+    enabled,
+  });
+}
+
+export function useUpdateProfile() {
+  return useMutation<CustomerProfile, Error, Partial<CustomerProfile>>({
+    mutationFn: (data) =>
+      api.patch("/api/accounts/profile/", data).then((r) => r.data),
   });
 }
 
 export function useCustomerOrders() {
   return useQuery<Order[]>({
     queryKey: ["customer-orders"],
-    queryFn: () => api.get("/api/orders/").then((r) => r.data),
-    enabled: typeof window !== "undefined" && !!localStorage.getItem("customer_token"),
+    queryFn: () => api.get("/api/accounts/orders/").then((r) => r.data),
   });
 }
 
@@ -138,6 +161,39 @@ export function useConfirmDelivery() {
   return useMutation<Order, Error, string>({
     mutationFn: (id) =>
       api.post(`/api/orders/${id}/confirm-delivery/`).then((r) => r.data),
+  });
+}
+
+export function useFavourites(enabled = true) {
+  return useQuery<FavouriteItem[]>({
+    queryKey: ["favourites"],
+    queryFn: () => api.get("/api/accounts/favourites/").then((r) => r.data),
+    enabled,
+  });
+}
+
+export function useAddFavourite() {
+  return useMutation<FavouriteItem, Error, string>({
+    mutationFn: (productId) =>
+      api.post("/api/accounts/favourites/", { product: productId }).then((r) => r.data),
+  });
+}
+
+export function useRemoveFavourite() {
+  return useMutation<void, Error, string>({
+    mutationFn: (productId) =>
+      api.delete(`/api/accounts/favourites/${productId}/`).then((r) => r.data),
+  });
+}
+
+export function useChangePassword() {
+  return useMutation<
+    { message: string },
+    Error,
+    { current_password: string; new_password: string }
+  >({
+    mutationFn: (data) =>
+      api.post("/api/accounts/change-password/", data).then((r) => r.data),
   });
 }
 
@@ -151,6 +207,7 @@ export function useAdminOrders(status?: string) {
       if (status) params.status = status;
       return api.get("/api/admin/orders/", { params }).then((r) => r.data);
     },
+    staleTime: 0,
     refetchInterval: 20000,
   });
 }

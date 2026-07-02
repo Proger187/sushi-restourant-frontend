@@ -10,7 +10,7 @@ import toast from "react-hot-toast";
 import { useTranslations } from "next-intl";
 import { useCartStore } from "@/store/cart";
 import { useAuthStore } from "@/store/auth";
-import { useCreateOrder } from "@/lib/queries";
+import { useCreateOrder, useProfile } from "@/lib/queries";
 import { formatPrice } from "@/lib/utils";
 import AddressMap from "@/components/checkout/AddressMap";
 import { DeliveryResult } from "@/types";
@@ -35,6 +35,7 @@ export default function CheckoutPage() {
   const createOrder = useCreateOrder();
   const user = useAuthStore((s) => s.user);
   const isLoggedIn = useAuthStore((s) => s.isLoggedIn());
+  const { data: profile } = useProfile(isLoggedIn);
 
   const [coords, setCoords] = useState<{ lat: number; lng: number } | null>(null);
   const [deliveryResult, setDeliveryResult] = useState<DeliveryResult | null>(null);
@@ -44,7 +45,7 @@ export default function CheckoutPage() {
 
   useEffect(() => {
     if (mounted && !isLoggedIn) {
-      router.replace("/auth/login?redirect=/checkout");
+      router.replace("/login?next=/checkout");
     }
   }, [mounted, isLoggedIn, router]);
 
@@ -67,11 +68,16 @@ export default function CheckoutPage() {
   });
 
   useEffect(() => {
-    if (user) {
-      setValue("customer_name", user.name, { shouldValidate: true });
-      setValue("phone", user.phone, { shouldValidate: true });
+    if (user?.full_name) {
+      setValue("customer_name", user.full_name, { shouldValidate: true });
     }
   }, [user, setValue]);
+
+  useEffect(() => {
+    if (profile?.phone) {
+      setValue("phone", profile.phone, { shouldValidate: true });
+    }
+  }, [profile, setValue]);
 
   const handleAddressSelect = useCallback((address: string, lat: number, lng: number) => {
     setValue("address", address, { shouldValidate: true });
@@ -109,7 +115,7 @@ export default function CheckoutPage() {
 
   return (
     <main className="max-w-7xl mx-auto px-4 py-8">
-      <h1 className="font-[family-name:var(--font-playfair)] text-3xl font-bold mb-8">{t("title")}</h1>
+      <h1 className="font-heading text-3xl font-bold mb-8">{t("title")}</h1>
       <form onSubmit={handleSubmit(onSubmit)} className="grid lg:grid-cols-2 gap-8">
         <div className="space-y-6">
           <div className="bg-surface border border-border rounded-2xl p-6 space-y-4">

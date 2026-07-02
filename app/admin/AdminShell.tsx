@@ -10,6 +10,7 @@ import {
   LogOut, Menu, X, Loader2,
 } from "lucide-react";
 import api from "@/lib/api";
+import Logo from "@/components/layout/Logo";
 
 export default function AdminShell({ children }: { children: React.ReactNode }) {
   const t = useTranslations("admin");
@@ -61,7 +62,7 @@ export default function AdminShell({ children }: { children: React.ReactNode }) 
       {sidebarOpen && <div className="fixed inset-0 bg-black/50 z-40 lg:hidden" onClick={() => setSidebarOpen(false)} />}
       <aside className={clsx("fixed lg:static inset-y-0 left-0 z-50 w-64 bg-surface border-r border-border flex flex-col transition-transform lg:translate-x-0", sidebarOpen ? "translate-x-0" : "-translate-x-full")}>
         <div className="p-4 border-b border-border flex items-center justify-between">
-          <h2 className="text-lg font-bold">{t("title")}</h2>
+          <Logo size="sm" />
           <button className="lg:hidden p-1 hover:bg-background rounded" onClick={() => setSidebarOpen(false)}><X className="w-5 h-5" /></button>
         </div>
         <nav className="flex-1 p-3 space-y-1">

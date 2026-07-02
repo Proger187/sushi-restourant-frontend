@@ -1,7 +1,12 @@
 {
+  "brand": {
+    "name": "Sushi Garden",
+    "tagline": "Fresh sushi, delivered with care"
+  },
   "nav": {
     "menu": "Menu", "about": "About", "contacts": "Contacts", "cart": "Cart",
-    "my_orders": "My Orders", "login": "Login", "logout": "Logout"
+    "my_orders": "My Orders", "login": "Sign In", "logout": "Sign Out",
+    "profile": "My Profile", "favourites": "Favourites"
   },
   "home": {
     "hero_title_1": "Fresh sushi",
@@ -58,17 +63,48 @@
   "auth": {
     "login_title": "Sign in",
     "register_title": "Create account",
-    "phone_placeholder": "Phone number",
-    "name_placeholder": "Your name",
+    "email_placeholder": "Email address",
+    "first_name_placeholder": "First name",
+    "last_name_placeholder": "Last name",
+    "phone_placeholder": "Phone (optional)",
     "password_placeholder": "Password",
     "confirm_password_placeholder": "Confirm password",
     "login_button": "Sign in",
     "register_button": "Create account",
     "no_account": "Don't have an account?",
     "have_account": "Already have an account?",
-    "login_error": "Invalid phone or password",
-    "register_error": "Registration failed. Phone may already be in use.",
+    "login_error": "Invalid email or password",
+    "register_error": "Registration failed. Email may already be in use.",
     "password_mismatch": "Passwords don't match"
+  },
+  "profile": {
+    "title": "Profile",
+    "orders_tab": "Orders",
+    "favourites_tab": "Favourites",
+    "change_password_tab": "Change password",
+    "first_name": "First name",
+    "last_name": "Last name",
+    "email": "Email",
+    "phone": "Phone",
+    "save": "Save changes",
+    "saved": "Profile updated",
+    "member_since": "Member since",
+    "orders_empty": "No orders yet",
+    "orders_go_menu": "Go to menu",
+    "tab_all": "All",
+    "tab_active": "Active",
+    "tab_completed": "Completed",
+    "tab_cancelled": "Cancelled",
+    "view_order": "View order",
+    "fav_empty": "No favourites yet",
+    "fav_empty_desc": "Browse the menu and heart the items you love",
+    "fav_go_menu": "Browse menu",
+    "current_password": "Current password",
+    "new_password": "New password",
+    "confirm_new_password": "Confirm new password",
+    "change_password_btn": "Update password",
+    "password_updated": "Password updated",
+    "and_more": "and {count} more"
   },
   "order": {
     "confirmed_title": "Order placed!",
@@ -144,7 +180,7 @@
     "search_address": "Search for restaurant address...", "map_hint": "Click on the map or drag the marker to set the exact location",
     "no_maps_key": "Set NEXT_PUBLIC_GOOGLE_MAPS_API_KEY to use the map picker",
     "save_settings": "Save Settings", "settings_saved": "Settings saved", "settings_failed": "Failed to save settings",
-    "login_title": "Admin Login", "login_username": "Username", "login_password": "Password",
+    "login_title": "Admin Login", "login_email": "Email", "login_password": "Password",
     "login_error": "Invalid login or password", "login_submit": "Sign in",
     "product_edit": "Edit product", "product_new": "New product",
     "image": "Image", "description": "Description", "price": "Price",

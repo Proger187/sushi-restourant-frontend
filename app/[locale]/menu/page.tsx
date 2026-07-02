@@ -27,7 +27,7 @@ function MenuContent() {
 
   return (
     <main className="max-w-7xl mx-auto px-4 py-8">
-      <h1 className="font-[family-name:var(--font-playfair)] text-4xl font-bold mb-6">
+      <h1 className="font-heading text-4xl font-bold mb-6">
         {t("title")}
       </h1>
       <div className="sticky top-16 z-30 bg-background/80 backdrop-blur-md py-2 -mx-4 px-4 mb-6">

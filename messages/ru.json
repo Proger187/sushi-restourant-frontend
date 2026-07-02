@@ -1,7 +1,12 @@
 {
+  "brand": {
+    "name": "Sushi Garden",
+    "tagline": "Свежие суши с заботой о вас"
+  },
   "nav": {
     "menu": "Меню", "about": "О нас", "contacts": "Контакты", "cart": "Корзина",
-    "my_orders": "Мои заказы", "login": "Войти", "logout": "Выйти"
+    "my_orders": "Мои заказы", "login": "Войти", "logout": "Выйти",
+    "profile": "Мой профиль", "favourites": "Избранное"
   },
   "home": {
     "hero_title_1": "Свежие суши",
@@ -58,17 +63,48 @@
   "auth": {
     "login_title": "Вход",
     "register_title": "Регистрация",
-    "phone_placeholder": "Номер телефона",
-    "name_placeholder": "Ваше имя",
+    "email_placeholder": "Электронная почта",
+    "first_name_placeholder": "Имя",
+    "last_name_placeholder": "Фамилия",
+    "phone_placeholder": "Телефон (необязательно)",
     "password_placeholder": "Пароль",
     "confirm_password_placeholder": "Подтвердите пароль",
     "login_button": "Войти",
     "register_button": "Зарегистрироваться",
     "no_account": "Нет аккаунта?",
     "have_account": "Уже есть аккаунт?",
-    "login_error": "Неверный телефон или пароль",
-    "register_error": "Ошибка регистрации. Возможно, номер уже используется.",
+    "login_error": "Неверный email или пароль",
+    "register_error": "Ошибка регистрации. Возможно, email уже используется.",
     "password_mismatch": "Пароли не совпадают"
+  },
+  "profile": {
+    "title": "Профиль",
+    "orders_tab": "Заказы",
+    "favourites_tab": "Избранное",
+    "change_password_tab": "Изменить пароль",
+    "first_name": "Имя",
+    "last_name": "Фамилия",
+    "email": "Email",
+    "phone": "Телефон",
+    "save": "Сохранить",
+    "saved": "Профиль обновлён",
+    "member_since": "С нами с",
+    "orders_empty": "Заказов пока нет",
+    "orders_go_menu": "Перейти в меню",
+    "tab_all": "Все",
+    "tab_active": "Активные",
+    "tab_completed": "Выполненные",
+    "tab_cancelled": "Отменённые",
+    "view_order": "Открыть заказ",
+    "fav_empty": "Нет избранного",
+    "fav_empty_desc": "Добавляйте понравившиеся позиции в избранное",
+    "fav_go_menu": "В меню",
+    "current_password": "Текущий пароль",
+    "new_password": "Новый пароль",
+    "confirm_new_password": "Подтвердите новый пароль",
+    "change_password_btn": "Обновить пароль",
+    "password_updated": "Пароль обновлён",
+    "and_more": "и ещё {count}"
   },
   "order": {
     "confirmed_title": "Заказ принят!",
@@ -144,7 +180,7 @@
     "search_address": "Найти адрес ресторана...", "map_hint": "Кликните на карту или перетащите маркер",
     "no_maps_key": "Установите NEXT_PUBLIC_GOOGLE_MAPS_API_KEY для карты",
     "save_settings": "Сохранить", "settings_saved": "Настройки сохранены", "settings_failed": "Ошибка сохранения",
-    "login_title": "Вход в панель", "login_username": "Логин", "login_password": "Пароль",
+    "login_title": "Вход в панель", "login_email": "Email", "login_password": "Пароль",
     "login_error": "Неверный логин или пароль", "login_submit": "Войти",
     "product_edit": "Редактировать товар", "product_new": "Новый товар",
     "image": "Изображение", "description": "Описание", "price": "Цена",

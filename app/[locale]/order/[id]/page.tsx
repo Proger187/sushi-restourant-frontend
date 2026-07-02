@@ -9,6 +9,7 @@ import { formatPrice, formatDate, statusColors } from "@/lib/utils";
 import StatusTimeline from "@/components/order/StatusTimeline";
 import { useQueryClient } from "@tanstack/react-query";
 import { clsx } from "clsx";
+import Logo from "@/components/layout/Logo";
 
 export default function OrderStatusPage({
   params,
@@ -70,7 +71,7 @@ export default function OrderStatusPage({
             <Clock className="w-8 h-8 text-accent" />
           </div>
         )}
-        <h1 className="font-[family-name:var(--font-playfair)] text-3xl font-bold">
+        <h1 className="font-heading text-3xl font-bold">
           {isDelivered ? t("enjoy") : t("confirmed_title")}
         </h1>
         {isDelivered && order.delivered_at && (
@@ -156,7 +157,10 @@ export default function OrderStatusPage({
         </div>
       </div>
 
-      <div className="text-center mt-8">
+      <div className="text-center mt-8 space-y-4">
+        <div className="flex justify-center">
+          <Logo size="md" />
+        </div>
         <Link href="/menu" className="inline-block bg-accent hover:bg-accent/90 text-white px-8 py-3 rounded-xl font-semibold transition-colors">
           {t("back_to_menu")}
         </Link>

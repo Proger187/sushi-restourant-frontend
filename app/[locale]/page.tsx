@@ -7,9 +7,11 @@ import { useProducts, usePublicDeliveryZones, useRestaurantSettings } from "@/li
 import { formatPrice } from "@/lib/utils";
 import ProductCard from "@/components/menu/ProductCard";
 import ProductCardSkeleton from "@/components/menu/ProductCardSkeleton";
+import Logo from "@/components/layout/Logo";
 
 export default function Home() {
   const t = useTranslations("home");
+  const tBrand = useTranslations("brand");
   const { data: featured, isLoading } = useProducts(undefined, true);
   const { data: zones = [] } = usePublicDeliveryZones();
   const { data: settings } = useRestaurantSettings();
@@ -25,13 +27,15 @@ export default function Home() {
       <section className="relative min-h-[70vh] flex items-center justify-center bg-gradient-to-br from-background via-surface to-background">
         <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,_var(--tw-gradient-stops))] from-accent/10 via-transparent to-transparent" />
         <div className="relative text-center px-4 max-w-3xl mx-auto space-y-6">
-          <h1 className="font-[family-name:var(--font-playfair)] text-5xl md:text-7xl font-bold leading-tight">
+          <Logo size="lg" showName={false} href="/" />
+          <div className="border-b border-white/20 w-16 mx-auto" />
+          <h1 className="font-heading text-5xl md:text-7xl font-semibold tracking-tight leading-tight">
             {t("hero_title_1")}
             <br />
-            <span className="text-accent">{t("hero_title_2")}</span>
+            <span className="text-accent italic">{t("hero_title_2")}</span>
           </h1>
-          <p className="text-muted text-lg md:text-xl max-w-xl mx-auto">
-            {t("hero_subtitle")}
+          <p className="font-body italic text-gray-300 text-lg md:text-xl max-w-xl mx-auto">
+            {tBrand("tagline")}
           </p>
           <div className="flex flex-col sm:flex-row gap-4 justify-center pt-4">
             <Link
@@ -51,7 +55,7 @@ export default function Home() {
       </section>
 
       <section className="max-w-7xl mx-auto px-4 py-16">
-        <h2 className="font-[family-name:var(--font-playfair)] text-3xl font-bold mb-8">
+        <h2 className="font-heading text-3xl font-bold mb-8">
           {t("featured_title")}
         </h2>
         <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 md:gap-6">
@@ -66,7 +70,7 @@ export default function Home() {
       </section>
 
       <section id="how-it-works" className="max-w-7xl mx-auto px-4 py-16">
-        <h2 className="font-[family-name:var(--font-playfair)] text-3xl font-bold mb-12 text-center">
+        <h2 className="font-heading text-3xl font-bold mb-12 text-center">
           {t("steps_title")}
         </h2>
         <div className="grid md:grid-cols-3 gap-8">
@@ -83,7 +87,7 @@ export default function Home() {
       </section>
 
       <section className="max-w-7xl mx-auto px-4 py-16">
-        <h2 className="font-[family-name:var(--font-playfair)] text-3xl font-bold mb-8 text-center">
+        <h2 className="font-heading text-3xl font-bold mb-8 text-center">
           {t("zones_title")}
         </h2>
         <div className="grid md:grid-cols-3 gap-6">
@@ -106,8 +110,8 @@ export default function Home() {
       <footer id="contacts" className="border-t border-border mt-16">
         <div className="max-w-7xl mx-auto px-4 py-12 grid md:grid-cols-3 gap-8">
           <div>
-            <h3 className="font-semibold text-lg mb-3">{settings?.name ?? "Sushi"}</h3>
-            <p className="text-muted text-sm">{t("footer_desc")}</p>
+            <Logo size="md" />
+            <p className="text-muted text-sm mt-3">{t("footer_desc")}</p>
           </div>
           <div>
             <h3 className="font-semibold mb-3">{t("footer_address_title")}</h3>

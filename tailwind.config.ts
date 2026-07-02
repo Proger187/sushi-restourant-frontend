@@ -16,6 +16,11 @@ const config: Config = {
         foreground: "#ffffff",
         muted: "#888888",
       },
+      fontFamily: {
+        heading: ["var(--font-heading)", "Georgia", "serif"],
+        body: ["var(--font-body)", "system-ui", "sans-serif"],
+        sans: ["var(--font-body)", "system-ui", "sans-serif"],
+      },
     },
   },
   plugins: [],

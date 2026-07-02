@@ -8,7 +8,7 @@ import { useTranslations } from "next-intl";
 
 export default function AdminLoginPage() {
   const router = useRouter();
-  const [username, setUsername] = useState("");
+  const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
@@ -21,7 +21,7 @@ export default function AdminLoginPage() {
 
     try {
       const { data } = await api.post("/api/auth/token/", {
-        username,
+        email,
         password,
       });
       localStorage.setItem("token", data.access);
@@ -41,10 +41,10 @@ export default function AdminLoginPage() {
 
         <form onSubmit={handleSubmit} className="space-y-4">
           <input
-            type="text"
-            placeholder={t("login_username")}
-            value={username}
-            onChange={(e) => setUsername(e.target.value)}
+            type="email"
+            placeholder={t("login_email")}
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
             className="w-full bg-background border border-border rounded-xl px-4 py-3 text-white placeholder:text-muted focus:outline-none focus:border-accent"
           />
           <input
@@ -61,7 +61,7 @@ export default function AdminLoginPage() {
 
           <button
             type="submit"
-            disabled={loading || !username || !password}
+            disabled={loading || !email || !password}
             className="w-full bg-accent hover:bg-accent/90 disabled:opacity-50 text-white py-3 rounded-xl font-semibold flex items-center justify-center gap-2"
           >
             {loading ? (

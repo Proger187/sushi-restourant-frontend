@@ -69,7 +69,7 @@ export default function ProductDetailPage({
         <div className="space-y-6">
           <div>
             <span className="text-sm text-muted bg-surface px-3 py-1 rounded-full">{product.category.name}</span>
-            <h1 className="font-[family-name:var(--font-playfair)] text-3xl md:text-4xl font-bold mt-3">{product.name}</h1>
+            <h1 className="font-heading text-3xl md:text-4xl font-bold mt-3">{product.name}</h1>
           </div>
           <p className="text-2xl font-bold text-accent">{formatPrice(product.price)}</p>
           {product.description && <p className="text-muted leading-relaxed">{product.description}</p>}
@@ -114,7 +114,7 @@ export default function ProductDetailPage({
 
       {relatedProducts && relatedProducts.length > 0 && (
         <section className="mt-16">
-          <h2 className="font-[family-name:var(--font-playfair)] text-2xl font-bold mb-6">{t("related")}</h2>
+          <h2 className="font-heading text-2xl font-bold mb-6">{t("related")}</h2>
           <div className="grid grid-cols-2 md:grid-cols-4 gap-4 md:gap-6">
             {relatedProducts.map((p) => <ProductCard key={p.id} product={p} />)}
           </div>
