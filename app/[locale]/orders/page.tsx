@@ -21,7 +21,7 @@ export default function OrdersPage() {
 
   useEffect(() => {
     if (mounted && !isLoggedIn) {
-      router.replace("/auth/login?redirect=/orders");
+      router.replace("/login?next=/orders");
     }
   }, [mounted, isLoggedIn, router]);
 
