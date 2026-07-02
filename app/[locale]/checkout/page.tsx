@@ -58,13 +58,20 @@ export default function CheckoutPage() {
     resolver: zodResolver(checkoutSchema),
     mode: "onChange",
     defaultValues: {
-      customer_name: user?.name ?? "",
-      phone: user?.phone ?? "",
+      customer_name: "",
+      phone: "",
       address: "",
       payment_method: "cash",
       notes: "",
     },
   });
+
+  useEffect(() => {
+    if (user) {
+      setValue("customer_name", user.name, { shouldValidate: true });
+      setValue("phone", user.phone, { shouldValidate: true });
+    }
+  }, [user, setValue]);
 
   const handleAddressSelect = useCallback((address: string, lat: number, lng: number) => {
     setValue("address", address, { shouldValidate: true });

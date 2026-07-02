@@ -4,7 +4,8 @@
     "my_orders": "My Orders", "login": "Login", "logout": "Logout"
   },
   "home": {
-    "hero_title": "Fresh sushi delivered to your door",
+    "hero_title_1": "Fresh sushi",
+    "hero_title_2": "delivered to your door",
     "hero_subtitle": "Premium rolls and sushi made fresh daily",
     "cta_menu": "View menu", "cta_how": "How it works",
     "featured_title": "Popular items",
@@ -90,7 +91,8 @@
     "title": "My Orders",
     "empty": "No orders yet",
     "empty_desc": "Your order history will appear here",
-    "view_details": "View details"
+    "view_details": "View details",
+    "go_to_menu": "Order now"
   },
   "status": {
     "pending": "Pending", "confirmed": "Confirmed", "cooking": "Preparing",

@@ -7,18 +7,8 @@ import { Loader2, ShoppingBag } from "lucide-react";
 import { useTranslations } from "next-intl";
 import { useAuthStore } from "@/store/auth";
 import { useCustomerOrders } from "@/lib/queries";
-import { formatPrice, formatDate } from "@/lib/utils";
+import { formatPrice, formatDate, statusColors } from "@/lib/utils";
 import { clsx } from "clsx";
-
-const statusColors: Record<string, string> = {
-  pending: "bg-yellow-500/20 text-yellow-400",
-  confirmed: "bg-blue-500/20 text-blue-400",
-  cooking: "bg-orange-500/20 text-orange-400",
-  ready: "bg-cyan-500/20 text-cyan-400",
-  delivering: "bg-purple-500/20 text-purple-400",
-  completed: "bg-green-500/20 text-green-400",
-  cancelled: "bg-red-500/20 text-red-400",
-};
 
 export default function OrdersPage() {
   const t = useTranslations("orders");
@@ -55,7 +45,7 @@ export default function OrdersPage() {
           <p className="text-lg text-muted">{t("empty")}</p>
           <p className="text-sm text-muted">{t("empty_desc")}</p>
           <Link href="/menu" className="inline-block mt-4 bg-accent hover:bg-accent/90 text-white px-6 py-3 rounded-xl font-semibold transition-colors">
-            {t("title")}
+            {t("go_to_menu")}
           </Link>
         </div>
       ) : (

@@ -5,7 +5,7 @@ import { CheckCircle, Clock, Loader2 } from "lucide-react";
 import { useTranslations } from "next-intl";
 import toast from "react-hot-toast";
 import { useOrder, useConfirmDelivery } from "@/lib/queries";
-import { formatPrice, formatDate } from "@/lib/utils";
+import { formatPrice, formatDate, statusColors } from "@/lib/utils";
 import StatusTimeline from "@/components/order/StatusTimeline";
 import { useQueryClient } from "@tanstack/react-query";
 import { clsx } from "clsx";
@@ -109,15 +109,7 @@ export default function OrderStatusPage({
           </div>
           <span className={clsx(
             "px-3 py-1.5 rounded-full text-sm font-medium",
-            {
-              "bg-yellow-500/20 text-yellow-400": order.status === "pending",
-              "bg-blue-500/20 text-blue-400": order.status === "confirmed",
-              "bg-orange-500/20 text-orange-400": order.status === "cooking",
-              "bg-cyan-500/20 text-cyan-400": order.status === "ready",
-              "bg-purple-500/20 text-purple-400": order.status === "delivering",
-              "bg-green-500/20 text-green-400": order.status === "completed",
-              "bg-red-500/20 text-red-400": order.status === "cancelled",
-            }
+            statusColors[order.status] ?? "bg-gray-500/20 text-gray-400"
           )}>
             {ts(order.status as "pending")}
           </span>

@@ -4,6 +4,23 @@ import { Category, DeliveryResult, Order, Product } from "@/types";
 
 // --- Public ---
 
+export interface PublicDeliveryZone {
+  id: string;
+  name: string;
+  max_km: number;
+  delivery_fee: string;
+  min_order_amount: string;
+  is_active: boolean;
+}
+
+export function usePublicDeliveryZones() {
+  return useQuery<PublicDeliveryZone[]>({
+    queryKey: ["public-delivery-zones"],
+    queryFn: () => api.get("/api/delivery/zones/").then((r) => r.data),
+    staleTime: 5 * 60 * 1000,
+  });
+}
+
 export interface RestaurantSettingsData {
   id: number;
   name: string;
